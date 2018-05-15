@@ -1,0 +1,93 @@
+// 註冊、登入、忘記密碼
+.login-flow {
+
+  // 背景
+  &:before {
+    content: "";
+    position: fixed;
+    top: 50px;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url("../images/login-bg.jpg");
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: bottom;
+    z-index: -1;
+  }
+
+  .title {
+    color: #fff;
+    font-size:30px;
+    line-height: 1;
+    font-weight: bold;
+    text-align: center;
+    margin-top: 64px;
+    margin-bottom: 32px;
+  }
+}
+.login-form {
+  width: 480px;
+  background-color: #fff;
+  padding: 32px 64px;
+  box-shadow: 0px 5px 30px 0px #004876;
+  margin: 0 auto 168px;
+
+  @media (max-width: 540px) {
+    width: 90%;
+    padding: 24px;
+  }
+
+  .input-block {
+    margin-bottom: 32px;
+
+    // 發生錯誤
+    &.has-error {
+      input {
+        border-color: #E20C18;
+      }
+    }
+  
+    label {
+      display: block;
+      position: relative;
+      font-size: 18px;
+      line-height: 24px;
+      font-weight: bold;
+      margin-bottom: 8px;
+  
+      &.required:before {
+        position: absolute;
+        content: "*";
+        top: 3px;
+        left: -13px;
+        font-size: 22px;
+        color: #ED798C;
+      }
+    }
+
+    input {
+      font-size: 16px;
+    }
+  }
+
+  .inline-input-block {
+    display: flex;
+    justify-content: space-between;
+
+    .input-block {
+      width: 47.7%;
+    }
+  }
+
+  // 送出按鈕
+  .submit-button {
+    width: 100%;
+    background-color: $link-color;
+    color: #fff;
+    padding: 15px 0;
+    font-size: 18px;
+    line-height: 1;
+    border: none;
+  }
+}

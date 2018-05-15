@@ -1,0 +1,50 @@
+.btn-normal {
+  width: 120px;
+  text-align: center;
+  height: 48px;
+  font-weight: bold;
+  line-height: 1;
+  border: none;
+  cursor: pointer;
+}
+
+.btn-default {
+  background-color: $theme-color;
+  color: #fff;
+  border: none;
+}
+
+.btn-outline {
+  background-color: transparent;
+  color: $theme-color;
+  border: 1px solid $theme-color;
+}
+
+.btn-major {
+  background-color: $link-color;
+  color: #fff;
+}
+
+.link-default {
+  display: block;
+  background-color: $theme-color;
+  color: #fff;
+  text-align: center;
+  font-weight: bold;
+  line-height: 1;
+  border: none;
+  padding: 14px 16px;
+  cursor: pointer;
+  margin: 0 auto;
+}
+
+.btn-link {
+  display: inline-block;
+  padding: 15px 25px;
+  text-transform: uppercase;
+  font-weight: 700;
+  border-radius: 0px;
+  border: none;
+  overflow: hidden;
+  line-height: 1.1;
+}

@@ -1,0 +1,50 @@
+#app {
+  overflow: hidden;
+  display: flex;
+  min-height: 100vh;
+  flex-direction: column;
+
+  main {
+    flex: 1;
+  }
+}
+
+.container {
+  width: 73%;
+  margin: 0 auto;
+
+  @media( min-width: 960px )and( max-width: 1400px ) {
+    width: 960px;
+  }
+
+  @include breakpoint(tablet) {
+    width: 90%;
+  }
+
+  @include breakpoint(xl-mobile) {
+    width: 90%;
+  }
+
+  @include breakpoint(mobile) {
+    width: 100%;
+    padding: 0 15px;
+  }
+}
+
+.hidden {
+  display: none;
+}
+
+// 錯誤文字
+.error-text {
+  margin-left: 8px;
+  color:rgba(226,12,24,0.8);
+  font-size: 14px;
+  line-height: 1;
+}
+
+.has-error {
+  input, textarea, select, .fake-input {
+    border: 2px solid #E20C18 !important;
+  }
+}

@@ -1,0 +1,75 @@
+/**
+ * radio button
+ */
+.inline-radio-block {
+  display: flex;
+
+  label {
+    font-weight: normal;
+  }
+
+  > label:not(:last-child) {
+    margin-right: 20px;
+  }
+}
+.radio-block {
+  display: flex;
+  align-items: center;
+  position: relative;
+  padding-left: 16px;
+
+  .circle, .check {
+    position: absolute;
+    top: 0;
+    left: 0;
+    transition-duration: 0.2s;
+    height: 16px;
+    width: 16px;
+    border-radius: 100%;
+  }
+  .circle {
+    border: 1px solid #575d5e;
+    cursor: pointer;
+  }
+  .check {
+    border-radius: 100%;
+    background-color: #575d5e;
+    transform: scale3d(0, 0, 0);
+
+    &:after {
+      display: block;
+      position: absolute;
+      content: "";
+      background-color: $theme-color;
+      left: -18px;
+      top: -18px;
+      height: 50px;
+      width: 50px;
+      border-radius: 100%;
+      z-index: 1;
+      opacity: 0;
+      margin: 0;
+      transform: scale3d(1.5, 1.5, 1);
+    }
+  }
+
+  input[type=radio] {
+    opacity: 0;
+    height: 0;
+    width: 0;
+    overflow: hidden;
+
+    &:checked {
+      @include radio-color($theme-color, 1);
+    }
+    &:checked ~ .check {
+      transform: scale3d(0.5, 0.5, 1);
+    }
+
+    &:disabled + .circle {
+      border: 1px solid rgba(87, 93, 94, 0.4);
+      cursor: not-allowed;
+    }
+  }
+
+}

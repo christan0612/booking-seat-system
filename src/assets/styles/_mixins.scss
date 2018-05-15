@@ -1,0 +1,32 @@
+//breakpoint mixin
+@mixin breakpoint($point) {
+  @if $point == desktop {
+    @media (min-width: 1200px) { @content ; }
+  }
+  @else if $point == medium-desktop {
+    @media (max-width: 1199px) { @content ; }
+  }
+  @else if $point == tablet {
+    @media (max-width: 991px) { @content ; }
+  }
+  @else if $point == xl-mobile {
+    @media (max-width: 767px) { @content ; }
+  }
+  @else if $point == mobile {
+    @media (max-width: 576px)  { @content ; }
+  }
+}
+
+/**
+ * radio button
+ */
+ @mixin radio-color($color, $opacity){
+  & ~ .check,
+  & ~ .circle {
+    opacity: $opacity;
+  }
+
+  & ~ .check {
+    background-color: $color;
+  }
+}

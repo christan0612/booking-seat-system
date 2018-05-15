@@ -1,0 +1,89 @@
+/**
+ * checkbox
+ */
+$checkbox-size: 16px;
+// Basic control styles
+.checkbox-label {
+  display: inline-block;
+  position: relative;
+  padding-left: 24px;
+  cursor: pointer;
+  margin: 0 auto;
+  line-height: $checkbox-size;
+  vertical-align: top;
+
+  input[type='checkbox'] {
+    position: absolute;
+    z-index: -1;
+    opacity: 0;
+    padding: 0;
+    width: 0;
+    height: 0;
+  }
+ 
+  input:checked ~ .checkbox-square {
+    background: $theme-color;
+
+    &:after {
+      display: block;
+    }
+  }
+ 
+  &:hover input:not([disabled]):checked ~ .checkbox-square,
+  input:checked:focus ~ .checkbox-square {
+    background: $theme-color;
+  }
+
+  input:disabled ~ .checkbox-square {
+    background: #e6e6e6;
+    opacity: 0.6;
+    pointer-events: none;
+  }
+
+  .checkbox-square:after {
+    content: "V";
+    font-size: 12px;
+    color: #fff;
+    left: 0;
+    top: 0;
+    height: 12px;
+    width: 12px;
+    text-align: center;
+    line-height: 12px;
+  }
+}
+ 
+.checkbox-square {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 16px;
+  width: 16px;
+  background: #fff;
+  border: 2px solid $theme-color;
+  border-radius: 2px;
+
+  &:after {
+    position: absolute;
+    display: none;
+  }
+}
+
+.resume.checkbox-label { 
+  input:checked ~ .checkbox-square {
+    border: 1px solid $link-color;
+    background-color: $link-color;
+  }
+  &:hover input:not([disabled]):checked ~ .checkbox-square,
+  input:checked:focus ~ .checkbox-square {
+    background: $link-color;
+  }
+  .checkbox-square {
+    border: 1px solid #979797;
+
+    &:after {
+      top: 1px;
+      left: 1px;
+    }
+  }
+}
