@@ -340,10 +340,10 @@ export default {
         let ticketTableIndex = -1
         this.chosenTicketTable.forEach((ticketInfo, index) => {
           if (ticketInfo.ticketDTO.id === seatInfo.ticketDTO.id) {
-            ticketInfo.number -= 1
             if (ticketInfo.number === 1) {
               ticketTableIndex = index
             }
+            ticketInfo.number -= 1
           }
         })
 

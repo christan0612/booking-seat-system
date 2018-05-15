@@ -47,14 +47,14 @@
                 put: false
               },
             }"
-            @clone="onClone"
           >
             <div class="seats-type"
               v-for="seatType in seatTypeList"
-              :key="seatType.id"
+              :key="seatType.groupType"
             >
               <div class="seat"
-                v-for="seat in seatType.seatDTOList"
+                v-for="(seat, index) in seatType.seatDTOList"
+                :key="index"
               ></div>
             </div>
           </draggable>
@@ -63,6 +63,7 @@
             <div class="seats-row-container">
               <div class="seats-row"
                 v-for="(seatRowInfo, rowIndex) in modifyEventDTO.seatRowDTOList"
+                :key="seatRowInfo.name"
               >
                 <div class="name">{{seatRowInfo.name}}</div>
                 <draggable
@@ -78,7 +79,7 @@
                 >
                   <div class="seats-type"
                     v-for="(seatType, index) in seatRowInfo.seatGroupDTOList"
-                    :key="seatType.id"
+                    :key="seatRowInfo.groupId"
                   >
                     <div class="seat"
                       :style="{backgroundColor: ticketColor(seatType.ticketDTO.id) }"
@@ -168,7 +169,7 @@ export default {
       // 座位種類
       seatTypeList: [
         {
-          id: null,
+          groupId: null,
           groupType: 'type-1',
           showTicketModal: false,
           ticketDTO: {
@@ -182,7 +183,7 @@ export default {
           ]
         },
         {
-          id: null,
+          groupId: null,
           groupType: 'type-2',
           showTicketModal: false,
           ticketDTO: {
@@ -200,7 +201,7 @@ export default {
           ]
         },
         {
-          id: null,
+          groupId: null,
           groupType: 'type-3',
           showTicketModal: false,
           ticketDTO: {
@@ -222,7 +223,7 @@ export default {
           ]
         },
         {
-          id: null,
+          groupId: null,
           groupType: 'type-4',
           showTicketModal: false,
           ticketDTO: {
@@ -248,7 +249,7 @@ export default {
           ]
         },
         {
-          id: null,
+          groupId: null,
           groupType: 'type-5',
           showTicketModal: false,
           ticketDTO: {
@@ -307,14 +308,8 @@ export default {
     },
     // 新增座位
     addSeats (element) {
-      // new Date().valueOf()
-      console.log(new Date().valueOf())
-      this.modifyEventDTO.seatRowDTOList[element.to.dataset.row].seatGroupDTOList[element.newIndex].id = new Date().valueOf()
-    },
-    onClone (evt) {
-      var origEl = evt.item
-      var cloneEl = evt.clone
-      console.log(evt)
+      this.modifyEventDTO.seatRowDTOList[element.to.dataset.row].seatGroupDTOList[element.newIndex] = JSON.parse(JSON.stringify(this.modifyEventDTO.seatRowDTOList[element.to.dataset.row].seatGroupDTOList[element.newIndex]))
+      this.modifyEventDTO.seatRowDTOList[element.to.dataset.row].seatGroupDTOList[element.newIndex].groupId = new Date().valueOf()
     },
     // 票卷顏色
     ticketColor (value) {
@@ -326,7 +321,15 @@ export default {
     },
     // 儲存票卷
     saveSeatsInfo () {
+      // 票種資訊
       this.modifyEventDTO.ticketDTOList = this.ticketList
+      // 移除彈出視窗資訊
+      this.modifyEventDTO.seatRowDTOList.forEach(rowInfo => {
+        rowInfo.seatGroupDTOList.forEach(goupInfo => {
+          this.$delete(goupInfo, showTicketModal)
+        })
+      })
+
       createEvent(this.modifyEventDTO).then(response => {
         console.log(response)
       })
