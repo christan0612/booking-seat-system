@@ -36,18 +36,19 @@
             總票數：<span class="number">{{ chosenSeatAmount }}</span>張，總金額 <span class="number">${{ totalPurchasePrice | formatComma }}</span>元
           </div>
           <div class="button-block">
-            <button type="button" class="btn btn-default btn-payment">結帳</button>
+            <button type="button" class="btn btn-default btn-payment" @click="purchase">結帳</button>
           </div>
         </div>
         <div class="right-content">
           <div class="title">選擇座位</div>
           <div class="stage-container">
             <div class="stage">舞台</div>
-            <div class="seat-container">
+            <div class="seat-container" v-if="eventDTO">
               <div class="seats-row seats-header">
                 <div class="seats-name"></div>
                 <div class="seats"
                   v-for="n in maxLength"
+                  :key="n"
                 >{{n}}</div>
               </div>
               <div class="seats-row"
@@ -105,176 +106,7 @@ export default {
   methods: {
     fetchData () {
       getEvent(this.$route.params.id).then(response => {
-        // this.eventDTO = response.eventDTO
-        this.eventDTO = {
-            "id": 12,
-            "ticketDTOList": [
-                {
-                    "id": 13,
-                    "name": "normal",
-                    "color": "#000000",
-                    "price": 100
-                },
-                {
-                    "id": 14,
-                    "name": "VIP",
-                    "color": "#111111",
-                    "price": 10000
-                }
-            ],
-            "seatRowDTOList": [
-                {
-                    "name": "A",
-                    "count": 5,
-                    "seatGroupDTOList": [
-                        {
-                            "groupType": "type-2",
-                            "ticketDTO": {
-                                "id": 13,
-                                "name": "normal",
-                                "color": "#000000",
-                                "price": 100
-                            },
-                            "seatDTOList": [
-                                {
-                                    "id": 80,
-                                    "number": 0,
-                                    "fullSeatNumber": "A1",
-                                    "status": "E"
-                                },
-                                {
-                                    "id": 83,
-                                    "number": 0,
-                                    "fullSeatNumber": "A2",
-                                    "status": "E"
-                                }
-                            ]
-                        },
-                        {
-                            "groupType": "type-3",
-                            "ticketDTO": {
-                                "id": 14,
-                                "name": "VIP",
-                                "color": "#111111",
-                                "price": 10000
-                            },
-                            "seatDTOList": [
-                                {
-                                    "id": 81,
-                                    "number": 0,
-                                    "fullSeatNumber": "A3",
-                                    "status": "E"
-                                },
-                                {
-                                    "id": 78,
-                                    "number": 0,
-                                    "fullSeatNumber": "A4",
-                                    "status": "E"
-                                },
-                                {
-                                    "id": 84,
-                                    "number": 0,
-                                    "fullSeatNumber": "A5",
-                                    "status": "E"
-                                }
-                            ]
-                        }
-                    ]
-                },
-                {
-                    "name": "B",
-                    "count": 7,
-                    "seatGroupDTOList": [
-                        {
-                            "groupType": "type-2",
-                            "ticketDTO": {
-                                "id": 14,
-                                "name": "VIP",
-                                "color": "#111111",
-                                "price": 10000
-                            },
-                            "seatDTOList": [
-                                {
-                                    "id": 87,
-                                    "number": 0,
-                                    "fullSeatNumber": "B1",
-                                    "status": "E"
-                                },
-                                {
-                                    "id": 82,
-                                    "number": 0,
-                                    "fullSeatNumber": "B2",
-                                    "status": "E"
-                                }
-                            ]
-                        },
-                        {
-                            "groupType": "type-3",
-                            "ticketDTO": {
-                                "id": 14,
-                                "name": "VIP",
-                                "color": "#111111",
-                                "price": 10000
-                            },
-                            "seatDTOList": [
-                                {
-                                    "id": 85,
-                                    "number": 0,
-                                    "fullSeatNumber": "B3",
-                                    "status": "S"
-                                },
-                                {
-                                    "id": 79,
-                                    "number": 0,
-                                    "fullSeatNumber": "B4",
-                                    "status": "E"
-                                },
-                                {
-                                    "id": 76,
-                                    "number": 0,
-                                    "fullSeatNumber": "B5",
-                                    "status": "E"
-                                }
-                            ]
-                        },
-                        {
-                            "groupType": "type-1",
-                            "ticketDTO": {
-                                "id": 14,
-                                "name": "VIP",
-                                "color": "#111111",
-                                "price": 10000
-                            },
-                            "seatDTOList": [
-                                {
-                                    "id": 86,
-                                    "number": 0,
-                                    "fullSeatNumber": "B6",
-                                    "status": "E"
-                                }
-                            ]
-                        },
-                        {
-                            "groupType": "type-1",
-                            "ticketDTO": {
-                                "id": 14,
-                                "name": "VIP",
-                                "color": "#111111",
-                                "price": 10000
-                            },
-                            "seatDTOList": [
-                                {
-                                    "id": 77,
-                                    "number": 0,
-                                    "fullSeatNumber": "B7",
-                                    "status": "E"
-                                }
-                            ]
-                        }
-                    ]
-                }
-            ]
-        }
+        this.eventDTO = response.eventDTO
 
         // 將座位往上拉一層出來
         this.eventDTO.seatRowDTOList.forEach(rows => {
@@ -288,15 +120,23 @@ export default {
           })
           this.$set(rows, 'seatList', seatList)
         })
-        
       })
     },
     plusTicket () {
       this.buyTicketAmount += 1
     },
     minusTicket () {
-      if (this.buyTicketAmount > 0)
-      this.buyTicketAmount -= 1
+      if (this.buyTicketAmount > 0) {
+        if (this.chosenSeatAmount === this.buyTicketAmount) {
+          Message({
+            showClose: true,
+            message: '請先取消座位',
+            type: 'info'
+          })
+        } else {
+          this.buyTicketAmount -= 1
+        }
+      }
     },
     chooseSeat (seatInfo) {
       // 先判斷是不是可以購買
@@ -309,7 +149,7 @@ export default {
           seatInfo.status = 'C'
           this.chosenSeatAmount += 1
           this.purchaseInfo.seatIdList.push(seatInfo.id)
-          // 先判斷 已購買的table內是否有存在該票種
+          // 先判斷 已購買的table內是否有存在該票種
           let ticketExist = false
           this.chosenTicketTable.forEach(ticketInfo => {
             if (ticketInfo.ticketDTO.id === seatInfo.ticketDTO.id) {
@@ -321,7 +161,6 @@ export default {
             seatInfo.number += 1
             this.chosenTicketTable.push(seatInfo)
           }
-          
         } else {
           Message({
             showClose: true,
@@ -353,8 +192,36 @@ export default {
       }
     },
     purchase () {
+      if (this.chosenSeatAmount < this.buyTicketAmount) {
+        Message({
+          showClose: true,
+          message: `還可以挑選${this.buyTicketAmount - this.chosenSeatAmount}個位置`,
+          type: 'info'
+        })
+        return false
+      }
+
       purchaseTicket(this.$route.params.id, this.purchaseInfo).then(response => {
         this.eventDTO = response.eventDTO
+
+        // 將座位往上拉一層出來
+        this.eventDTO.seatRowDTOList.forEach(rows => {
+          let seatList = []
+          rows.seatGroupDTOList.forEach(group => {
+            // 增加票卷資訊
+            group.seatDTOList.forEach(seat => {
+              this.$set(seat, 'ticketDTO', group.ticketDTO)
+            })
+            seatList = [...seatList, ...group.seatDTOList]
+          })
+          this.$set(rows, 'seatList', seatList)
+        })
+
+        Message({
+          showClose: true,
+          message: '購買成功！',
+          type: 'success'
+        })
       })
     }
   },
@@ -363,7 +230,7 @@ export default {
       if (!this.eventDTO) return 0
       let max = 0
       this.eventDTO.seatRowDTOList.forEach(seatRow => {
-        if(seatRow.count > max) {
+        if (seatRow.count > max) {
           max = seatRow.count
         }
       })
@@ -372,7 +239,7 @@ export default {
     totalPurchasePrice () {
       let sum = 0
       if (this.chosenTicketTable.length === 0) return sum
-      
+
       this.chosenTicketTable.forEach(ticketInfo => {
         sum += ticketInfo.number * ticketInfo.ticketDTO.price
       })
@@ -468,11 +335,11 @@ export default {
 .detail-info-block {
   text-align: center;
   margin-bottom: 32px;
-  
+
   .number {
     margin: 0 8px;
     color: $theme-color;
-    font-size: 20px; 
+    font-size: 20px;
     font-weight: bold;
   }
 }
@@ -566,4 +433,3 @@ export default {
   }
 }
 </style>
-

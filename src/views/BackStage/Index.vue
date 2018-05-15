@@ -45,8 +45,9 @@
                 name: 'seatRow',
                 pull: 'clone',
                 put: false
-              },
+              }
             }"
+            :clone="onClone"
           >
             <div class="seats-type"
               v-for="seatType in seatTypeList"
@@ -58,7 +59,7 @@
               ></div>
             </div>
           </draggable>
-          <div class="stage-container">
+          <div class="stage-container">
             <div class="stage">舞台</div>
             <div class="seats-row-container">
               <div class="seats-row"
@@ -79,7 +80,7 @@
                 >
                   <div class="seats-type"
                     v-for="(seatType, index) in seatRowInfo.seatGroupDTOList"
-                    :key="seatRowInfo.groupId"
+                    :key="seatType.groupId"
                   >
                     <div class="seat"
                       :style="{backgroundColor: ticketColor(seatType.ticketDTO.id) }"
@@ -89,7 +90,7 @@
                     ></div>
                     <div class="choose-ticket-type-block" v-if="seatType.showTicketModal">
                       <div class="label">選擇票種：</div>
-                      <select v-model="seatType.ticketDTO.id">
+                      <select v-model="seatType.ticketDTO.id" @change="seatType.showTicketModal = false">
                         <option :value="null">請選擇</option>
                         <option
                           v-for="ticket in ticketList"
@@ -132,6 +133,7 @@
   </main>
 </template>
 <script>
+import { Message } from 'element-ui'
 import { createTicket, createEvent } from '@/API/Ticket'
 import draggable from 'vuedraggable'
 let ticketConfig = {
@@ -142,7 +144,7 @@ let ticketConfig = {
 }
 let rowSeatsConfig = {
   count: null,
-  name:	null,
+  name: null,
   seatGroupDTOList: []
 }
 export default {
@@ -160,7 +162,7 @@ export default {
         seatRowDTOList: [
           {
             count: null,
-            name:	'A',
+            name: 'A',
             seatGroupDTOList: []
           }
         ],
@@ -303,15 +305,17 @@ export default {
       this.modifyEventDTO.seatRowDTOList.push(newRows)
       for (let i = index; i < this.modifyEventDTO.seatRowDTOList.length; i++) {
         // 編碼 A - Z
-        this.modifyEventDTO.seatRowDTOList[i].name = String.fromCharCode(65+ i)
+        this.modifyEventDTO.seatRowDTOList[i].name = String.fromCharCode(65 + i)
       }
+    },
+    onClone (element) {
+      return JSON.parse(JSON.stringify(element))
     },
     // 新增座位
     addSeats (element) {
-      this.modifyEventDTO.seatRowDTOList[element.to.dataset.row].seatGroupDTOList[element.newIndex] = JSON.parse(JSON.stringify(this.modifyEventDTO.seatRowDTOList[element.to.dataset.row].seatGroupDTOList[element.newIndex]))
       this.modifyEventDTO.seatRowDTOList[element.to.dataset.row].seatGroupDTOList[element.newIndex].groupId = new Date().valueOf()
     },
-    // 票卷顏色
+    // 票卷顏色
     ticketColor (value) {
       for (let i = 0; i < this.ticketList.length; i++) {
         if (value === this.ticketList[i].id) {
@@ -321,17 +325,38 @@ export default {
     },
     // 儲存票卷
     saveSeatsInfo () {
-      // 票種資訊
+      // 檢查是不是都有選票種
+      let checkTicketInfo = false
+      this.modifyEventDTO.seatRowDTOList.forEach(rowInfo => {
+        rowInfo.seatGroupDTOList.forEach(groupInfo => {
+          if (!groupInfo.ticketDTO.id) {
+            Message({
+              showClose: true,
+              message: '所有座位皆須選擇票種',
+              type: 'info'
+            })
+            checkTicketInfo = true
+          }
+        })
+      })
+      if (checkTicketInfo) return false
+
+      // 票種資訊
       this.modifyEventDTO.ticketDTOList = this.ticketList
       // 移除彈出視窗資訊
       this.modifyEventDTO.seatRowDTOList.forEach(rowInfo => {
-        rowInfo.seatGroupDTOList.forEach(goupInfo => {
-          this.$delete(goupInfo, showTicketModal)
+        let numberCount = 1
+        rowInfo.seatGroupDTOList.forEach(groupInfo => {
+          groupInfo.seatDTOList.forEach(seat => {
+            seat.number = numberCount
+            numberCount++
+          })
+          this.$delete(groupInfo, 'showTicketModal')
         })
       })
 
       createEvent(this.modifyEventDTO).then(response => {
-        console.log(response)
+        this.$router.push(`/front-stage/${response.eventDTO.id}`)
       })
     },
     // 刪除座位

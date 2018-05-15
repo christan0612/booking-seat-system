@@ -9,8 +9,8 @@ Vue.use(Router)
 export default new Router({
   routes: [
     {
-     path: '/',
-     redirect: '/back-stage' 
+      path: '/',
+      redirect: '/back-stage'
     },
     {
       path: '/back-stage',
@@ -19,7 +19,7 @@ export default new Router({
     },
     {
       path: '/back-stage/:id',
-      name: 'BackStage',
+      name: 'EditBackStage',
       component: BackStage
     },
     {
