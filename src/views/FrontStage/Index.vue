@@ -106,20 +106,7 @@ export default {
   methods: {
     fetchData () {
       getEvent(this.$route.params.id).then(response => {
-        this.eventDTO = response.eventDTO
-
-        // 將座位往上拉一層出來
-        this.eventDTO.seatRowDTOList.forEach(rows => {
-          let seatList = []
-          rows.seatGroupDTOList.forEach(group => {
-            // 增加票卷資訊
-            group.seatDTOList.forEach(seat => {
-              this.$set(seat, 'ticketDTO', group.ticketDTO)
-            })
-            seatList = [...seatList, ...group.seatDTOList]
-          })
-          this.$set(rows, 'seatList', seatList)
-        })
+        this.setEventData(response)
       })
     },
     plusTicket () {
@@ -137,6 +124,22 @@ export default {
           this.buyTicketAmount -= 1
         }
       }
+    },
+    setEventData(response) {
+      this.eventDTO = response.eventDTO
+
+      // 將座位往上拉一層出來
+      this.eventDTO.seatRowDTOList.forEach(rows => {
+        let seatList = []
+        rows.seatGroupDTOList.forEach(group => {
+          // 增加票卷資訊
+          group.seatDTOList.forEach(seat => {
+            this.$set(seat, 'ticketDTO', group.ticketDTO)
+          })
+          seatList = [...seatList, ...group.seatDTOList]
+        })
+        this.$set(rows, 'seatList', seatList)
+      })
     },
     chooseSeat (seatInfo) {
       // 先判斷是不是可以購買
@@ -202,26 +205,15 @@ export default {
       }
 
       purchaseTicket(this.$route.params.id, this.purchaseInfo).then(response => {
-        this.eventDTO = response.eventDTO
-
-        // 將座位往上拉一層出來
-        this.eventDTO.seatRowDTOList.forEach(rows => {
-          let seatList = []
-          rows.seatGroupDTOList.forEach(group => {
-            // 增加票卷資訊
-            group.seatDTOList.forEach(seat => {
-              this.$set(seat, 'ticketDTO', group.ticketDTO)
-            })
-            seatList = [...seatList, ...group.seatDTOList]
-          })
-          this.$set(rows, 'seatList', seatList)
-        })
+        this.setEventData(response)
 
         Message({
           showClose: true,
           message: '購買成功！',
           type: 'success'
         })
+      }).catch(response => {
+        this.setEventData(response)
       })
     }
   },

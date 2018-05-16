@@ -28,7 +28,7 @@ service.interceptors.response.use(
           break
       }
 
-      return Promise.reject(res)
+      return Promise.reject(response.data)
     } else {
       return response.data
     }
