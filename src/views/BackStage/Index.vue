@@ -7,7 +7,7 @@
           <div class="title">票種設定</div>
           <form class="ticket-create-block" @submit.prevent="createTicket">
             <div class="sub-title">建立票種</div>
-            <div class="inline-input-block">
+            <div class="inline-input-block first-child">
               <label for="">票種</label>
               <input type="text" v-model="ticketInfo.name" required>
             </div>
@@ -24,6 +24,7 @@
               <div class="table-cell">顏色</div>
             </div>
             <div class="table-row"
+              v-if="ticketList.length > 0"
               v-for="ticket in ticketList"
               :key="ticket.id"
             >
@@ -31,6 +32,10 @@
               <div class="table-cell">${{ ticket.price | formatComma }}元</div>
               <div class="table-cell"><div class="color" :style="{backgroundColor: ticket.color }"></div></div>
             </div>
+          </div>
+          <div class="empty-block"
+            v-if="ticketList.length === 0"
+          >目前尚未建立任何票種
           </div>
         </div>
         <div class="right-content">
@@ -441,7 +446,7 @@ export default {
   align-items: flex-end;
   border-radius: 4px;
 
-  &:first-child {
+  &.first-child {
     margin-bottom: 16px;
     margin-top: 16px;
   }
@@ -462,7 +467,7 @@ export default {
   display: table;
   width: 100%;
   border-collapse: collapse;
-  margin-bottom: 32px;
+  margin-bottom: 16px;
 
   .table-row {
     display: table-row;
@@ -485,6 +490,12 @@ export default {
     width: 50%;
     height: 10px;
   }
+}
+.empty-block {
+  text-align: center;
+  background-color: #f2f2f2;
+  padding: 32px;
+  margin-bottom: 16px;
 }
 .seats-type-container {
   position: relative;

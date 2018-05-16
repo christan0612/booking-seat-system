@@ -23,6 +23,7 @@
               <div class="table-cell">小計</div>
             </div>
             <div class="table-row"
+              v-if="chosenTicketTable.length > 0"
               v-for="chosenTicketInfo in chosenTicketTable"
               :key="chosenTicketInfo.id"
             >
@@ -36,6 +37,11 @@
               </div>
               <div class="table-cell">${{ chosenTicketInfo.ticketDTO.price * chosenTicketInfo.number | formatComma }}元</div>
             </div>
+          </div>
+          <div class="empty-block"
+            v-if="chosenTicketTable.length === 0"
+          >
+            尚未選擇座位
           </div>
           <div class="detail-info-block">
             總票數：<span class="number">{{ chosenSeatAmount }}</span>張，總金額 <span class="number">${{ totalPurchasePrice | formatComma }}</span>元
@@ -218,6 +224,9 @@ export default {
 
       purchaseTicket(this.$route.params.id, this.purchaseInfo).then(response => {
         this.setEventData(response)
+        this.buyTicketAmount = 0
+        this.chosenSeatAmount = 0
+        this.chosenTicketTable = []
 
         Message({
           showClose: true,
@@ -335,6 +344,12 @@ export default {
   .center {
     text-align: center;
   }
+}
+.empty-block {
+  text-align: center;
+  background-color: #f2f2f2;
+  padding: 32px;
+  margin-bottom: 16px;
 }
 .detail-info-block {
   text-align: center;
