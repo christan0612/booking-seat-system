@@ -227,6 +227,7 @@ export default {
         this.buyTicketAmount = 0
         this.chosenSeatAmount = 0
         this.chosenTicketTable = []
+        this.purchaseInfo.seatIdList = []
 
         Message({
           showClose: true,
@@ -235,6 +236,9 @@ export default {
         })
       }).catch(response => {
         this.setEventData(response)
+        this.chosenSeatAmount = 0
+        this.chosenTicketTable = []
+        this.purchaseInfo.seatIdList = []
       })
     }
   },
