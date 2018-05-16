@@ -441,6 +441,11 @@ export default {
   align-items: flex-end;
   border-radius: 4px;
 
+  &:first-child {
+    margin-bottom: 16px;
+    margin-top: 16px;
+  }
+
   label {
     flex: initial;
     width: 10%;
@@ -449,7 +454,7 @@ export default {
   input {
     flex: initial;
     width: 60%;
-    height: 32px;
+    height: 20px;
     padding: 0 8px;
   }
 }

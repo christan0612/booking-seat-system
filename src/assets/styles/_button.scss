@@ -12,6 +12,11 @@
   background-color: $theme-color;
   color: #fff;
   border: none;
+  transition: all 0.3s;
+
+  &:hover {
+    background-color: $darker-theme-color;
+  }
 }
 
 .btn-outline {

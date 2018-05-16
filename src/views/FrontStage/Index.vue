@@ -28,7 +28,12 @@
             >
               <div class="table-cell">{{chosenTicketInfo.ticketDTO.name}}</div>
               <div class="table-cell">{{ chosenTicketInfo.number }}張</div>
-              <div class="table-cell">{{ chosenTicketInfo.fullSeatNumber }}</div>
+              <div class="table-cell">
+                <div
+                  v-for="seat in chosenTicketInfo.seatList"
+                  :key="seat"
+                >{{ seat }}</div>
+              </div>
               <div class="table-cell">${{ chosenTicketInfo.ticketDTO.price * chosenTicketInfo.number | formatComma }}元</div>
             </div>
           </div>
@@ -158,10 +163,12 @@ export default {
             if (ticketInfo.ticketDTO.id === seatInfo.ticketDTO.id) {
               ticketExist = true
               ticketInfo.number += 1
+              ticketInfo.seatList.push(seatInfo.fullSeatNumber)
             }
           })
           if (!ticketExist) {
-            seatInfo.number += 1
+            seatInfo.number = 1
+            this.$set(seatInfo, 'seatList', [seatInfo.fullSeatNumber])
             this.chosenTicketTable.push(seatInfo)
           }
         } else {
@@ -173,19 +180,24 @@ export default {
         }
       } else {
         // 取消
+        // 恢復座位狀態
         seatInfo.status = 'E'
+        // 已選擇的座位數- 1
         this.chosenSeatAmount -= 1
-
+        // 從送給後端的資料中移除
         let removeIndex = this.purchaseInfo.seatIdList.indexOf(seatInfo.id)
         this.purchaseInfo.seatIdList.splice(removeIndex, 1)
-
+        // 找出目前的座位在購票明細中的位置
         let ticketTableIndex = -1
         this.chosenTicketTable.forEach((ticketInfo, index) => {
           if (ticketInfo.ticketDTO.id === seatInfo.ticketDTO.id) {
             if (ticketInfo.number === 1) {
               ticketTableIndex = index
+            } else {
+              ticketInfo.number -= 1
+              let seatIndex = ticketInfo.seatList.indexOf(seatInfo.fullSeatNumber)
+              ticketInfo.seatList.splice(seatIndex, 1)
             }
-            ticketInfo.number -= 1
           }
         })
 
