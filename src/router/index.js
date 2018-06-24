@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-// import Index from '@/views/Index/Index'
+import Index from '@/views/Index/Index'
 import BackStage from '@/views/BackStage/Index'
 import FrontStage from '@/views/FrontStage/Index'
 
@@ -10,7 +10,8 @@ export default new Router({
   routes: [
     {
       path: '/',
-      redirect: '/back-stage'
+      name: 'Index',
+      component: Index
     },
     {
       path: '/back-stage',

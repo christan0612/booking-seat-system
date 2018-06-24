@@ -334,10 +334,10 @@ export default {
 
   .table-row {
     display: table-row;
-    border-bottom: 1px solid $light-theme-color;
+    border-bottom: 1px solid $lighter-theme-color;
 
     &.table-head {
-      background-color: $light-theme-color;
+      background-color: $lighter-theme-color;
     }
   }
   .table-cell {
@@ -378,7 +378,7 @@ export default {
   margin-bottom: 32px;
 
   .stage {
-    background-color: $light-theme-color;
+    background-color: $lighter-theme-color;
     width: 80px;
     margin: 0 auto;
     padding: 10px;
@@ -420,7 +420,7 @@ export default {
     }
 
     &.chosen {
-      background-color: $light-theme-color;
+      background-color: $lighter-theme-color;
     }
   }
 }
@@ -449,7 +449,7 @@ export default {
         background-color: $theme-color;
       }
       &.chosen {
-        background-color: $light-theme-color;
+        background-color: $lighter-theme-color;
       }
 
     }

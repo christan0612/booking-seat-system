@@ -139,6 +139,7 @@
 </template>
 <script>
 import { Message } from 'element-ui'
+import seatTypeConfig from '@/config/seatType'
 import { createTicket, createEvent } from '@/API/Ticket'
 import draggable from 'vuedraggable'
 let ticketConfig = {
@@ -174,118 +175,7 @@ export default {
         ticketDTOList: []
       },
       // 座位種類
-      seatTypeList: [
-        {
-          groupId: null,
-          groupType: 'type-1',
-          showTicketModal: false,
-          ticketDTO: {
-            id: null
-          },
-          seatDTOList: [
-            {
-              id: null,
-              number: null
-            }
-          ]
-        },
-        {
-          groupId: null,
-          groupType: 'type-2',
-          showTicketModal: false,
-          ticketDTO: {
-            id: null
-          },
-          seatDTOList: [
-            {
-              id: null,
-              number: null
-            },
-            {
-              id: null,
-              number: null
-            }
-          ]
-        },
-        {
-          groupId: null,
-          groupType: 'type-3',
-          showTicketModal: false,
-          ticketDTO: {
-            id: null
-          },
-          seatDTOList: [
-            {
-              id: null,
-              number: null
-            },
-            {
-              id: null,
-              number: null
-            },
-            {
-              id: null,
-              number: null
-            }
-          ]
-        },
-        {
-          groupId: null,
-          groupType: 'type-4',
-          showTicketModal: false,
-          ticketDTO: {
-            id: null
-          },
-          seatDTOList: [
-            {
-              id: null,
-              number: null
-            },
-            {
-              id: null,
-              number: null
-            },
-            {
-              id: null,
-              number: null
-            },
-            {
-              id: null,
-              number: null
-            }
-          ]
-        },
-        {
-          groupId: null,
-          groupType: 'type-5',
-          showTicketModal: false,
-          ticketDTO: {
-            id: null
-          },
-          seatDTOList: [
-            {
-              id: null,
-              number: null
-            },
-            {
-              id: null,
-              number: null
-            },
-            {
-              id: null,
-              number: null
-            },
-            {
-              id: null,
-              number: null
-            },
-            {
-              id: null,
-              number: null
-            }
-          ]
-        }
-      ]
+      seatTypeList: seatTypeConfig
     }
   },
   methods: {
@@ -471,10 +361,10 @@ export default {
 
   .table-row {
     display: table-row;
-    border-bottom: 1px solid $light-theme-color;
+    border-bottom: 1px solid $lighter-theme-color;
 
     &.table-head {
-      background-color: $light-theme-color;
+      background-color: $lighter-theme-color;
     }
   }
   .table-cell {
@@ -519,7 +409,7 @@ export default {
   .seat {
     width: 40px;
     height: 40px;
-    background-color: $light-theme-color;
+    background-color: $lighter-theme-color;
     border-radius: 8px;
 
     &:not(:last-child) {
@@ -535,7 +425,7 @@ export default {
   .stage {
     width: 60px;
     margin: 0 auto;
-    background-color: $light-theme-color;
+    background-color: $lighter-theme-color;
     text-align: center;
     padding: 4px 8px;
     margin-bottom: 16px;

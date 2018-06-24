@@ -43,7 +43,7 @@ header {
     line-height: 1;
 
     &.active {
-      background-color: rgba(108, 140, 2, 0.4);
+      background-color: $darker-theme-color;
     }
   }
 }
