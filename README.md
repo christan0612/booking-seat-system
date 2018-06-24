@@ -1,6 +1,6 @@
-# decathlon-frontstage
+# Booking Seat System
 
-> A Vue.js project
+> A demo project for booking seat system has simple front-stage&back-stage
 
 ## Build Setup
 
