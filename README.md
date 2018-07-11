@@ -1,6 +1,12 @@
 # Booking Seat System
 
-> A demo project for booking seat system has simple front-stage&back-stage
+> A demo project for booking seat system
+> 1. use Vue-cli
+> 2. has simple back-stage and front-stage
+
+## Demo
+
+<img src="/static/demo.gif">
 
 ## Build Setup
 
