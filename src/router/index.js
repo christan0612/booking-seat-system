@@ -2,8 +2,9 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import Index from '@/views/Index/Index'
 import BackStageIndex from '@/views/BackStageIndex/Index'
-import Activity from '@/views/BackStageActivity/Index'
-import FrontStage from '@/views/FrontStageIndex/Index'
+import BackStageActivity from '@/views/BackStageActivity/Index'
+import FrontStageIndex from '@/views/FrontStageIndex/Index'
+import FrontStageActivity from '@/views/FrontStageActivity/Index'
 
 Vue.use(Router)
 
@@ -22,17 +23,22 @@ export default new Router({
     {
       path: '/create-activity',
       name: 'CreateActivity',
-      component: Activity
+      component: BackStageActivity
     },
     {
       path: '/edit-activity/:id',
       name: 'EditActivity',
-      component: Activity
+      component: BackStageActivity
+    },
+    {
+      path: '/front-stage',
+      name: 'FrontStageIndex',
+      component: FrontStageIndex
     },
     {
       path: '/front-stage/:id',
-      name: 'FrontStage',
-      component: FrontStage
+      name: 'FrontStageActivity',
+      component: FrontStageActivity
     }
   ],
   linkActiveClass: 'active',
