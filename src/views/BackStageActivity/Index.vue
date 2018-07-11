@@ -5,18 +5,9 @@
       <div class="content-container">
         <div class="left-content">
           <div class="title">票種設定</div>
-          <form class="ticket-create-block" @submit.prevent="createTicket">
-            <div class="sub-title">建立票種</div>
-            <div class="inline-input-block first-child">
-              <label for="">票種</label>
-              <input type="text" v-model="ticketInfo.name" required>
-            </div>
-            <div class="inline-input-block">
-              <label for="">售價</label>
-              <input type="number" v-model.number="ticketInfo.price" required>
-            </div>
-            <button type="submit" class="btn btn-default btn-create">新增</button>
-          </form>
+          <create-ticket-form
+            :ticket-list="ticketList"
+          ></create-ticket-form>
           <div class="ticket-table">
             <div class="table-head table-row">
               <div class="table-cell">票種</div>
@@ -91,18 +82,13 @@
                       :style="{backgroundColor: ticketColor(seatType.ticketDTO.id) }"
                       v-for="seat in seatType.seatDTOList"
                       :key="seat.id"
-                      @click.stop="seatType.showTicketModal = !seatType.showTicketModal"
+                      @click.stop="toggleTicketTypeSelect(seatType)"
                     ></div>
-                    <div class="choose-ticket-type-block" v-if="seatType.showTicketModal">
-                      <div class="label">選擇票種：</div>
-                      <select v-model="seatType.ticketDTO.id" @change="seatType.showTicketModal = false">
-                        <option :value="null">請選擇</option>
-                        <option
-                          v-for="ticket in ticketList"
-                          :key="ticket.id"
-                          :value="ticket.id">{{ ticket.name }}</option>
-                      </select>
-                    </div>
+                    <ticket-type-select
+                      v-if="seatType.showTicketModal"
+                      :ticket-list="ticketList"
+                      :seat-type="seatType"
+                    ></ticket-type-select>
                     <div class="delete-seat-block" @click.stop="deleteSeats(rowIndex, index)">
                       <svg-icon icon-class="remove" class="delete-icon"></svg-icon>
                     </div>
@@ -140,27 +126,27 @@
 <script>
 import { Message } from 'element-ui'
 import seatTypeConfig from '@/config/seatType'
-import { createTicket, createEvent } from '@/API/Ticket'
+// import { createEvent } from '@/API/Ticket'
 import draggable from 'vuedraggable'
-let ticketConfig = {
-  color: null,
-  id: null,
-  name: null,
-  price: null
-}
+// component
+import CreateTicketForm from './Components/CreateTicketForm'
+import TicketTypeSelect from './Components/TicketTypeSelect'
+
+
 let rowSeatsConfig = {
   count: null,
   name: null,
   seatGroupDTOList: []
 }
 export default {
-  name: 'BackStage',
+  name: 'Activity',
   components: {
-    draggable
+    draggable,
+    CreateTicketForm,
+    TicketTypeSelect
   },
   data () {
     return {
-      ticketInfo: JSON.parse(JSON.stringify(ticketConfig)),
       // 票種清單
       ticketList: [],
       modifyEventDTO: {
@@ -178,21 +164,16 @@ export default {
       seatTypeList: seatTypeConfig
     }
   },
+  mounted () {
+    // 檢查是否有建立好的票種
+    this.getTicketInfo()
+  },
   methods: {
-    // 新增票種
-    createTicket () {
-      // 隨機產生票卷顏色
-      this.ticketInfo.color = `rgba(${this.randomColor()}, ${this.randomColor()}, ${this.randomColor()}, 0.4)`
-
-      createTicket(this.ticketInfo).then(response => {
-        this.ticketInfo.id = response.ticketDTO.id
-        this.ticketList.push(this.ticketInfo)
-        this.ticketInfo = JSON.parse(JSON.stringify(ticketConfig))
-      })
-    },
-    // 產生 0-255 的值
-    randomColor () {
-      return Math.floor((Math.random() * 255) + 1)
+    getTicketInfo () {
+      let ticketList = localStorage.getItem('ticketList')
+      if (ticketList) {
+        this.ticketList = JSON.parse(ticketList)
+      }
     },
     // 加新的一排
     addNewRow (index) {
@@ -250,13 +231,18 @@ export default {
         })
       })
 
-      createEvent(this.modifyEventDTO).then(response => {
-        this.$router.push(`/front-stage/${response.eventDTO.id}`)
-      })
+      // API
+      // createEvent(this.modifyEventDTO).then(response => {
+      //   this.$router.push(`/front-stage/${response.eventDTO.id}`)
+      // })
     },
     // 刪除座位
     deleteSeats (rowIndex, index) {
       this.modifyEventDTO.seatRowDTOList[rowIndex].seatGroupDTOList.splice(index, 1)
+    },
+    // 開啟票種選擇
+    toggleTicketTypeSelect (seatType) {
+      seatType.showTicketModal = !seatType.showTicketModal
     }
   },
   computed: {
@@ -301,58 +287,7 @@ export default {
     padding-left: 6px;
   }
 }
-.main-title {
-  font-size: 24px;
-  line-height: 1;
-  margin-bottom: 16px;
-  font-weight: bold;
-  color: $theme-color;
-}
 
-.ticket-create-block {
-  position: relative;
-  background-color: #f9f9f9;
-  padding: 16px;
-  margin-bottom: 32px;
-
-  .sub-title {
-    position: absolute;
-    top: -6px;
-    right: 16px;
-    color: $theme-color;
-  }
-
-  .btn-create {
-    position: absolute;
-    right: 16px;
-    bottom: 16px;
-    padding: 8px 16px;
-  }
-}
-
-.inline-input-block {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: flex-end;
-  border-radius: 4px;
-
-  &.first-child {
-    margin-bottom: 16px;
-    margin-top: 16px;
-  }
-
-  label {
-    flex: initial;
-    width: 10%;
-    margin-right: 8px;
-  }
-  input {
-    flex: initial;
-    width: 60%;
-    height: 20px;
-    padding: 0 8px;
-  }
-}
 .ticket-table {
   display: table;
   width: 100%;
@@ -461,40 +396,7 @@ export default {
       background-color: #fff;
       border: 1px solid $theme-color;
     }
-    .choose-ticket-type-block {
-      width: 100px;
-      position: absolute;
-      bottom: -64px;
-      left: 0;
-      background-color: #fff;
-      padding: 4px;
-      border-radius: 4px;
-      box-shadow: 0 1px 6px rgba(0,0,0,0.3);
-      z-index: 10;
 
-      &:after {
-        bottom: 100%;
-        left: 50%;
-        border: solid transparent;
-        content: " ";
-        height: 0;
-        width: 0;
-        position: absolute;
-        pointer-events: none;
-        border-color: rgba(136, 183, 213, 0);
-        border-bottom-color: #fff;
-        border-width: 5px;
-        margin-left: -5px
-      }
-
-      .label {
-        font-size: 12px;
-      }
-
-      select {
-        border: none;
-      }
-    }
     .delete-seat-block {
       position: absolute;
       right: 2px;

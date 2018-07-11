@@ -136,7 +136,7 @@ export default {
         }
       }
     },
-    setEventData(response) {
+    setEventData (response) {
       this.eventDTO = response.eventDTO
 
       // 將座位往上拉一層出來
@@ -292,13 +292,6 @@ export default {
     border-left: 3px solid $theme-color;
     padding-left: 6px;
   }
-}
-.main-title {
-  font-size: 24px;
-  line-height: 1;
-  margin-bottom: 16px;
-  font-weight: bold;
-  color: $theme-color;
 }
 .number-control-block {
   display: flex;
