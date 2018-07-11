@@ -215,7 +215,7 @@ export default {
         })
       })
 
-      localStorage.setItem('')
+      this.$router.push(`/front-stage`)
 
       // API
       // createEvent(this.modifyEventDTO).then(response => {
