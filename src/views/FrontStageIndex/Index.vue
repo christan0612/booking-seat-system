@@ -18,7 +18,7 @@
 <script>
 
 export default {
-  name: 'FrontStageIndex',
+  name: 'FrontStageIndex'
 }
 </script>
 <style lang="scss" scoped>
